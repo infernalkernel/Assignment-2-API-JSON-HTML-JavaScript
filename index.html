@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset ="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Assignment 2: US Population Data</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Honk&display=swap" rel="stylesheet">
+    </html>
+    <style>
+        /* Add CSS styles here */
+        body {
+            font-family: 'Honk', sans-serif;
+            font-size: x-large;
+            background-color: rgb(247, 0, 255);
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 2px solid rgb(131, 131, 131);
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+    </head>
+    <body>
+        <h1>US Population Data</h1>
+        <div id="population-data">
+            <!-- The table will be populated here by JavaScript -->
+        </div>
+        <div id="image-container" style="margin-top: 20px;">
+            <img src="https://m.media-amazon.com/images/I/615lstmihqL.jpg.jpg" alt="FREEDOM!!!" style="width: 100%; max-width: 600px;">
+        </div>
+        <script>
+            // JavaScript for fetching and displaying US Population data
+            document.addEventListener('DOMContentLoaded', function() {
+                fetch('https://datausa.io/api/data?drilldowns=Nation&measures=Population')
+                .then(response => response.json())
+                .then(data => {
+                    const populationData = data.data;
+                    const table = document.createElement('table');
+                    const headerRow = table.insertRow();
+                    const headers = ['Year', 'Population'];
+                    headers.forEach(headerText => {
+                        let header = document.createElement('th');
+                        header.textContent = headerText;
+                        headerRow.appendChild(header);
+                    });
+
+                    populationData.forEach(row => {
+                        const rowElement = table.insertRow();
+                        const yearCell = rowElement.insertCell();
+                        yearCell.textContent = row.Year;
+                        const populationCell = rowElement.insertCell();
+                        populationCell.textContent = row.Population.toLocaleString(); // Format number with commas
+                    });
+
+                    document.getElementById('population-data').appendChild(table);
+                })
+                .catch(error => console.error('Error fetching population data:', error));
+            });
+        </script>
+    </body>
+    </html>
